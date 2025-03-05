@@ -1,0 +1,19 @@
+sudo chown -R $USER:$USER neo4j-docker
+sudo chown -R 7474:7474 neo4j-docker/
+sudo chmod -R 755 neo4j-docker/
+touch neo4j-docker/conf/neo4j.conf
+
+
+Запускаем контейнеры:
+```bash
+docker-compose up -d --build
+```
+neo4j Browser
+http://localhost:7474
+Вход: neo4j / password
+
+Проверяем логи:
+```bash
+docker-compose logs -f
+docker-compose logs -f neo4j
+```

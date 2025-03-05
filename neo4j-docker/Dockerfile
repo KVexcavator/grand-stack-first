@@ -1,0 +1,3 @@
+FROM neo4j:latest
+ENV NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+CMD ["neo4j"]

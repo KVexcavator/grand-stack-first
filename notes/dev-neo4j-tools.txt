@@ -1,0 +1,20 @@
+Neo4j Desktop – это центр управления Neo4j. Из Neo4j Desktop можно управлять экземплярами базы данных Neo4j, изменять их настройки, устанавливать плагины и приложения, а также выполнять административные функции, такие как ввод/вывод содержимого базы данных.
+Установка Neo4j Desktop (для GUI)
+1. https://neo4j.com/download/
+2. выбрать Neo4j Desktop, и скачать .AppImage для Linux.
+3. для всех пользователей (глобально) положить .AppImage в /opt/:
+sudo mv neo4j-desktop-*.AppImage /opt/neo4j-desktop.AppImage
+sudo chmod +x /opt/neo4j-desktop.AppImage
+создать ссылку:
+sudo ln -s /opt/neo4j-desktop.AppImage /usr/local/bin/neo4j-desktop
+запускать из терминала
+neo4j-desktop
+
+Neo4j Browser – встроенная в браузер инструментальная среда запросов и один из основных способов взаимодействия с Neo4j во время разработки. С помощью Neo4j Browser можно посылать базе данных запросы Cypher и отображать результаты в виде графов или таблиц.
+- зайти http://localhost:7474
+- логин и пароль - neo4j/password
+- проверка:
+```cypher
+RETURN "Hello, Neo4j!"
+```
+вернёт Hello, Neo4j!, значит все работает

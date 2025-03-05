@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  neo4j:
+    build:
+      context: ./neo4j-docker
+      dockerfile: Dockerfile
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./neo4j-docker/data:/data
+      - ./neo4j-docker/logs:/logs
+    environment:
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=1G
+    env_file:
+      - ./neo4j-docker/.env
+    restart: unless-stopped
