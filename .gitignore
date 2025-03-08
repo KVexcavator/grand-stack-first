@@ -1,2 +1,4 @@
-neo4j-docker/data
-neo4j-docker/logs
+neo4j-docker/data/
+neo4j-docker/logs/
+apollo-server-demo/node_modules/
+apollo-server-demo/package-lock.json

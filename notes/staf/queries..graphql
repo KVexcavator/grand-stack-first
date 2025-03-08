@@ -1,0 +1,14 @@
+{
+	businessBySearchTerm(search: "Library", first: 5, orderBy: name_desc) {
+		name
+		avgStars
+			reviews(first: 2) {
+				stars
+				text
+				user {
+					name
+			}
+		}
+	}
+}
+
