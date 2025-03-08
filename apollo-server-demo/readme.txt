@@ -53,3 +53,15 @@ query ExampleQuery{
     avgStars
   }
 }
+query ExampleQuery{
+  businessBySearchTerm(search: "Library"){
+    businessId
+    name
+    avgStars
+    reviews {
+      text
+      stars
+      }
+    }
+  }
+
