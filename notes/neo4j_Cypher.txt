@@ -1,0 +1,76 @@
+docker compose up -d --build
+neo4j Browser
+http://localhost:7474
+Вход: neo4j / password
+---------------------------------------
+https://neo4j.com/docs/cypher-cheat-sheet/5/all/
+=======================================
+Узлы (). можно указать метку(и) узла, используя двоеточие в качестве разделителя, например (:User).
+---------------------------------------
+Отношения []. можно указать тип и направление:
+
+(:Review)-[:REVIEWS]->(:Business).
+---------------------------------------
+Свойства «имя: значение», перечисленными через запятую в фигурных скобках {}
+---------------------------------------
+Псевдонимы
+(r:Review)-[a:REVIEWS]->(b:Business) 
+псевдоним r становится переменной, привязанной к узлу Review 
+псевдоним a привязывается к отношению REVIEWS 
+псевдоним b – к узлу Business
+Эти переменные доступны только в запросе Cypher, где они определены.
+========================================
+Команда CREATE используется для создания данных в базе данных
+CREATE (b:Business{name: "Bob's Pizza"})
+тоже с SET, где RETURN служит для отображения результата
+CREATE (b:Business)
+SET b.name = "Bob's Pizza"
+RETURN b
+пример сложнее
+CREATE (b:Business)<-[:REVIEWS]-(r:Review)
+SET b.name = "Bob's Pizza", r.stars = 4, r.text = "Great pizza"
+RETURN b, r
+или
+CREATE p=(b:Business)<-[:REVIEWS]-(r:Review)<-[:WROTE]-(u:User)
+SET b.name = "Bob's Pizza",
+r.stars = 4,
+r.text = "Great pizza",
+u.name = "Willie"
+RETURN p
+------------------------------------
+все узлы в базе данных
+MATCH (a) RETURN a
+------------------------------------
+удалить все данные из базы
+MATCH (a) DETACH DELETE a
+=================================================
+Ограничение уникальности
+CREATE CONSTRAINT ON (b:Business) ASSERT b.businessId IS UNIQUE;
+Ограничение существования свойства
+CREATE CONSTRAINT ON (b:Business) ASSERT b.businessId IS NOT NULL
+Ограничение ключа узла
+CREATE CONSTRAINT ON (p:Person) ASSERT (p.firstName, p.lastName) IS NODE KEY;
+=================================================
+MERGE  запрос  идемпотентный
+создает данные, указанные в шаблоне, только если они еще отсутствуют в базе данных
+MERGE (b:Business {name: "Bob's Pizza"})
+MERGE (r:Review {stars: 4, text: "Great pizza!"})
+MERGE (u:User {name: "Willie"})
+MERGE (b)<-[:REVIEWS]-(r)<-[:WROTE]-(u)
+RETURN *
+=================================================
+MATCH 
+для поиска данных в базе данных
+MATCH (u:User)
+RETURN u
+сложнее
+MATCH (u:User)-[:WROTE]->(r:Review)-[:REVIEWS]->(b:Business)
+RETURN u, r, b
+--------------------------------------------------
+WHERE
+MATCH (b:Business)
+WHERE b.name = "Bob's Pizza"
+RETURN b
+тоже сделать
+MATCH (b:Business {name: "Bob's Pizza"})
+RETURN b
