@@ -25,3 +25,19 @@ docker compose up --build
 загружен ли APOC
 CALL apoc.help('apoc')
 ===================================================
+играемся
+:play grandstack
+CALL db.schema.visualization();
+таблица с именами свойств, их типами и узлами
+CALL db.schema.nodeTypeProperties()
+===================================================
+проект node-app-demo
+npm init -y
+пакеты
+@neo4j/graphql – преобразует запросы GraphQL в один зап­рос Cypher
+apollo-server – Apollo Server – сервер GraphQL
+graphql – эталонная реализация GraphQL.js для JavaScript, требуется двумя
+другими : @neo4j/graphql и apollo-server
+neo4j-driver – клиентские драйверы Neo4j
+----------------------------------------------------
+npm i @neo4j/graphql graphql neo4j-driver apollo-server

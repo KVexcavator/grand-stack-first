@@ -3,3 +3,5 @@ neo4j-docker/logs/
 neo4j-docker/plugins/
 apollo-server-demo/node_modules/
 apollo-server-demo/package-lock.json
+node-app-demo/node_modules/
+node-app-demo/package-lock.json
