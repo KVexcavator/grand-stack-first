@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
   neo4j:
     build:
@@ -12,10 +11,15 @@ services:
     volumes:
       - ./neo4j-docker/data:/data
       - ./neo4j-docker/logs:/logs
+      - ./neo4j-docker/plugins:/plugins
     environment:
       - NEO4J_dbms_memory_pagecache_size=1G
       - NEO4J_dbms_memory_heap_initial__size=512m
       - NEO4J_dbms_memory_heap_max__size=1G
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=["apoc","apoc-extended"]
     env_file:
       - ./neo4j-docker/.env
     restart: unless-stopped

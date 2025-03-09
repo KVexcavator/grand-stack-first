@@ -1,0 +1,27 @@
+# Библиотека Neo4j GraphQL
+документация
+https://neo4j.com/docs/graphql/current/
+создание нового проекта
+https://neo4j.com/docs/graphql/current/getting-started/
+Neo4j GraphQL Toolbox
+https://neo4j.com/docs/graphql/current/getting-started/toolbox/
+-------------------------------------------
+Двумя основными особенностями библиотеки Neo4j GraphQL яв-
+ляются создание схемы GraphQL и преобразование запросов GraphQL в запросы
+Cypher.
+===========================================
+Пользователям Neo4j Desktop необходимо установить плагин из стандартной библиотеки APOC(на вкладку Plugins в проекте, выбрать APOC в списке, жать Install)
+В моём случае решал через докер и компосу
+Как узнать, какая версия Neo4j сейчас?
+CALL dbms.components() YIELD name, versions RETURN name, versions;
+=> Neo4j Kernel"	["5.27.0"] 
+есть разница для 4 и 5 версий, страница для пятой:
+https://neo4j.com/labs/apoc/5/installation/
+! значит верссия должна быть сооте в докер-файле
+ищем подходящую https://github.com/neo4j-contrib/neo4j-apoc-procedures/
+docker compose down -v
+docker compose up --build
+!разрешения на файлы
+загружен ли APOC
+CALL apoc.help('apoc')
+===================================================
