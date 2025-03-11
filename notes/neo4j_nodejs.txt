@@ -1,3 +1,5 @@
+https://neo4j.com/labs/apoc/5/installation/
+
 # Библиотека Neo4j GraphQL
 документация
 https://neo4j.com/docs/graphql/current/
@@ -24,6 +26,10 @@ docker compose up --build
 !разрешения на файлы
 загружен ли APOC
 CALL apoc.help('apoc')
+RETURN apoc.version()
+SHOW PROCEDURES YIELD name WHERE name STARTS WITH "apoc" RETURN name LIMIT 10;
+SHOW FUNCTIONS YIELD name WHERE name STARTS WITH "apoc.cypher" RETURN name;
+должны быть apoc.cypher.doIt, apoc.cypher.run, apoc.cypher.eval.
 ===================================================
 играемся
 :play grandstack
@@ -41,3 +47,7 @@ graphql – эталонная реализация GraphQL.js для JavaScript
 neo4j-driver – клиентские драйверы Neo4j
 ----------------------------------------------------
 npm i @neo4j/graphql graphql neo4j-driver apollo-server
+----------------------------------------------------
+!! отладка
+установим переменную окружения DEBUG терминале пс
+DEBUG=@neo4j/graphql:* node index.js 

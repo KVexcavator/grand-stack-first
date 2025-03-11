@@ -1,0 +1,160 @@
+Язык запросов GraphQL
+====================================================
+Упорядочение и разбиение на страницы
+query ExampleQuery{
+  businesses(limit: 3, sort: { name: ASC } ) {
+    name
+  }
+}
+-----------------------------------------------------
+Вложенные запросы
+{
+  businesses(limit: 3, sort: { name: ASC } ) {
+    name
+    categories {
+      name
+    }
+  }
+}
+=====================================================
+Фильтрация
+https://neo4j.com/docs/graphql/current/queries-aggregations/filtering/
+осуществляется добавлением аргумента where к соответствующим типам GraphQL в запросе
+-----------------------------------------------------
+Аргумент where
+{
+  businesses(where: { name_CONTAINS: "Brew"}) {
+    name
+    categories {
+      name
+    }
+  }
+}
+------------------------------------------------------
+Вложенные фильтры
+пример поиска компаний, содержащих в названии слово «Brew» и имеющих хотя бы один отзыв с рейтингом не ниже 4,75
+{
+  businesses(where: { name_CONTAINS: "Brew", reviews_SOME: { stars_GTE: 4.75 }}) {
+    name
+    categories {
+      name
+    }
+  }
+}
+------------------------------------------------------
+Логические операторы: AND, OR
+отыскать компании, входящие в кате­горию Coffee или Breakfast
+{
+  businesses(
+    where: {
+      OR: [
+            { categories_SOME: { name_EQ: "Coffee" } }
+            { categories_SOME: { name_EQ: "Breakfast" } }
+          ]
+        }
+      ) {
+    name
+    address
+    categories {
+      name
+    }
+  }
+}
+--------------------------------------------------
+Фильтрация выборки
+компании, предлагающие кофе или завтрак, в отзывах к которым содержится словосочетание breakfast sandwich
+{
+  businesses(
+    where: {
+      OR: [
+            { categories_SOME: { name_EQ: "Coffee" } }
+            { categories_SOME: { name_EQ: "Breakfast" } }
+          ]
+        }
+      ) {
+    name
+    address
+    reviews(where: { text_CONTAINS: "breakfast sandwich" }) {
+      stars
+      text
+    } 
+  }
+}
+=====================================================
+Работа с датой/временем
+-----------------------------------------------------
+{
+  reviews(limit: 3, sort: { date: DESC }) {
+    stars
+    date
+    business {
+      name
+    }
+  }
+}
+------------------------------------------------------
+Фильтры по полям с типами Date и DateTime
+пример, отзывы, созданные до 1 января 2017 года
+{
+  reviews(
+      where: { date_LTE: "2017-01-01" },
+      limit: 3, 
+      sort: { date: DESC } 
+    ) {
+    stars
+    date
+    business {
+      name
+    }
+  }
+}
+==============================================
+Работа с пространственными данными
+https://neo4j.com/docs/graphql/current/types/#type-definitions-types-point
+Neo4j поддерживает тип точки в пространстве, способный представлять двумерные (например, широту и долготу) и трехмерные (например,x, y, z или широту, долготу, высоту) координаты точки, как в географической (широта и долгота), так и в декартовой системе координат. Библиотека Neo4j GraphQL поддерживает два пространственных типа: Point – для точек в географической системе координат и CartesianPoint – для точек в декартовой системе координат
+----------------------------------------------
+Выборка данных типа Point
+{
+  businesses(limit: 3, sort: { name: ASC }) {
+    name
+    location {
+      latitude
+      longitude
+    }
+  }
+}
+----------------------------------------------
+Фильтрация по расстояниям
+Например, какие компании находятся в пределах 1,5 км от меня?
+{
+  businesses(
+    where: {
+      location_LT: {
+        distance: 3500
+        point: { latitude: 37.563675, longitude: -122.322243 }
+      }
+    }
+  ) {
+    name
+    address
+    city
+    state
+  }
+}
+===============================================
+Директива @cypher (!плагин APOC должно подключить)
+https://neo4j.com/docs/graphql/current/directives/custom-logic/
+Директива @cypher принимает оператор с одним аргументом statement, представляющим запрос Cypher. Параметры передаются в этот запрос во время выполнения, включая this, представляющий текущий узел, а также любые аргументы уровня поля, объявленные в определении типа GraphQL.
+-----------------------------------------------
+Вычисляемые скалярные поля
+например, добавить поле averageStars к типу Business, вычисляющее среднее количество
+звезд из всех отзывов о текущей компании с использованием переменной this
+type Business {
+  businessId: ID!
+  averageStars: Float!
+  @cypher(
+    statement: "MATCH (this)<-[:REVIEWS]-(r:Review) RETURN avg(r.stars)"
+  )
+  .... 
+}
+! перезапустиь сервер GraphQL НЕРАБОТАЕТ

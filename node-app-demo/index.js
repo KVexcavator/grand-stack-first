@@ -9,8 +9,13 @@ const driver = neo4j.driver(
 );
 
 const typeDefs = /* GraphQL */ `
-  type Business {
+  type Business @node{
     businessId: ID!
+    averageStars: Float!
+      @cypher(
+        statement: "MATCH (this)<-[:REVIEWS]-(r:Review) RETURN avg(r.stars)",
+        columnName: "averageStars"
+      )
     name: String!
     city: String!
     state: String!
@@ -21,13 +26,13 @@ const typeDefs = /* GraphQL */ `
     @relationship(type: "IN_CATEGORY", direction: OUT)
   }
 
-  type User {
+  type User @node{
     userID: ID!
     name: String!
     reviews: [Review!]! @relationship(type: "WROTE", direction: OUT)
   }
 
-  type Review {
+  type Review @node{
     reviewId: ID!
     stars: Float!
     date: Date!
@@ -36,21 +41,30 @@ const typeDefs = /* GraphQL */ `
     business: Business! @relationship(type: "REVIEWS", direction: OUT)
   }
 
-  type Category {
+  type Category @node{
     name: String!
     businesses: [Business!]! @relationship(type: "IN_CATEGORY", direction: IN)
   }
 `;
 
-const neoSchema = new Neo4jGraphQL({ typeDefs, driver });
-
-neoSchema.getSchema().then((schema) => {
-  const server = new ApolloServer({
-    schema
-  });
-  server.listen().then(({url}) => {
-    console.log(`🚀  GraphQL server ready at ${url}`);
-  });
+const neoSchema = new Neo4jGraphQL({ 
+  typeDefs, 
+  driver,
+  features: {
+    cypher: true,
+  },
 });
+
+neoSchema.getSchema()
+  .then((schema) => {
+    const server = new ApolloServer({ schema });
+
+    server.listen().then(({ url }) => {
+      console.log(`🚀 GraphQL сервер запущен по адресу ${url}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Ошибка при создании схемы:", error);
+  });
 
 // node index.js
