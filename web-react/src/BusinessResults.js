@@ -17,7 +17,11 @@ function BusinessResults(props) {
             <tr key={i}>
               <td>{b.name}</td>
               <td>{b.address}</td>
-              <td>{b.category}</td>
+              <td>
+                {b.categories.reduce(
+                (acc, c, i) => acc + (i === 0 ? " " : ", ") + c.name, ""
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

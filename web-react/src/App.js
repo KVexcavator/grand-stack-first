@@ -1,29 +1,26 @@
 import React, { useState } from "react";
 import BusinessResults from "./BusinessResults";
+import { gql, useQuery } from "@apollo/client";
 
-const businesses = [  
+const GET_BUSINESSES_QUERY = gql`
   {
-    businessId: "b1",
-    name: "San Mateo Public Library",
-    address: "55 W 3rd Ave",
-    category: "Library",
-  },
-  {
-    businessId: "b2",
-    name: "Ducky's Car Wash",
-    address: "716 N San Mateo Dr",
-    category: "Car Wash",
-  },
-  {
-    businessId: "b3",
-    name: "Hanabi",
-    address: "723 California Dr",
-    category: "Restaurant",
-  },
-];  
+    businesses {
+      businessId
+      name
+      address
+      categories {
+        name
+      }
+    }
+  }
+`;  
   
 function App() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { loading, error, data } = useQuery(GET_BUSINESSES_QUERY);
+
+  if (error) return <p>Error</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div>
@@ -42,15 +39,7 @@ function App() {
         </label>
         <input type="submit" value="Submit" />
       </form>
-      <BusinessResults 
-        businesses={
-          selectedCategory === "All"
-          ? businesses
-          : businesses.filter((b) => {
-            return b.category === selectedCategory;
-          })
-        } 
-      />
+      <BusinessResults businesses={data.businesses} />
     </div>
   );
 }

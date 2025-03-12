@@ -13,7 +13,7 @@ const typeDefs = /* GraphQL */ `
     businessId: ID!
     averageStars: Float!
       @cypher(
-        statement: "MATCH (this)<-[:REVIEWS]-(r:Review) RETURN avg(r.stars)",
+        statement: "MATCH (this)<-[:REVIEWS]-(r:Review) RETURN avg(r.stars) AS averageStars",
         columnName: "averageStars"
       )
     name: String!
@@ -68,3 +68,4 @@ neoSchema.getSchema()
   });
 
 // node index.js
+// http://localhost:4000

@@ -1,0 +1,13 @@
+npx create-react-app web-react --use-npm
+npm install @apollo/client graphql
+
+надо запустиь базу и сервер
+TODO: собрать на досуге в докер
+
+docker compose up
+http://localhost:7474
+neo4j password
+node node-app-demo/index.js
+-----------------------------------
+Обработчик useQuery – это основной метод выполнения запросов GraphQL.
+import { gql, useQuery } from "@apollo/client";
