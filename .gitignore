@@ -5,3 +5,6 @@ apollo-server-demo/node_modules/
 apollo-server-demo/package-lock.json
 node-app-demo/node_modules/
 node-app-demo/package-lock.json
+web-react/node_modules/
+web-react/package-lock.json
+.qodo
