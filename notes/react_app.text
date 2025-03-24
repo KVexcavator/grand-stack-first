@@ -8,6 +8,8 @@ docker compose up
 http://localhost:7474
 neo4j password
 node node-app-demo/index.js
+cd web-react/
+npm run
 -----------------------------------
 Обработчик useQuery – это основной метод выполнения запросов GraphQL.
 import { gql, useQuery } from "@apollo/client";
