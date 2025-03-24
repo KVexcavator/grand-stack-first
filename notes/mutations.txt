@@ -1,0 +1,83 @@
+mutation {
+  createBusinesses(
+    input: {
+      businessId: "b10"
+      name: "Philz Coffee"
+      address: "113. S B St"
+      city: "San Mateo"
+      state: "CA"
+      location: { latitude: 37.567109, longitude: -122.323680 }
+    }
+  ) {
+    businesses {
+      businessId
+      name
+      address
+      city
+    }
+    info {
+      nodesCreated
+    }
+  }
+}
+Запуск этой мутации в Apollo Studio создаст новый узел типа Business в базе данных:
+{
+  "data": {
+    "createBusinesses": {
+      "businesses": [
+        {
+          "businessId": "b10",
+          "name": "Philz Coffee",
+          "address": "113. S B St",
+          "city": "San Mateo"
+        }
+      ],
+      "info": {
+        "nodesCreated": 1
+      }
+    }
+  }
+}
+
+=========================================
+Создание отношений, не работает connect
+Пример, связать новый узел Philz Coffee с узлом категории Coffee:
+mutation {
+  updateBusinesses(
+    where: { businessId: "b10" }
+    connect: { categories: { where: { node: { name: "Coffee" } } } }
+  ) {
+    businesses {
+      name
+      categories {
+        name
+      }
+    }
+    info {
+      relationshipsCreated
+    }
+  }
+}
+==========================================
+Изменение 
+mutation {
+  updateBusinesses(
+    where: { businessId: "b10" }
+    update: { address: "113 E 5th Ave" }
+  ) {
+    businesses {
+      name
+      address
+      categories {
+        name
+      }
+    }
+  }
+}
+-------------------------------
+удаление
+mutation {
+  deleteBusinesses(where: { businessId: "b10" }) {
+    nodesDeleted
+  }
+}

@@ -23,7 +23,7 @@ const typeDefs = /* GraphQL */ `
     location: Point!
     reviews: [Review!]! @relationship(type: "REVIEWS", direction: IN)
     categories: [Category!]!
-    @relationship(type: "IN_CATEGORY", direction: OUT)
+      @relationship(type: "IN_CATEGORY", direction: OUT)
   }
 
   type User @node{
@@ -43,7 +43,8 @@ const typeDefs = /* GraphQL */ `
 
   type Category @node{
     name: String!
-    businesses: [Business!]! @relationship(type: "IN_CATEGORY", direction: IN)
+    businesses: [Business!]!
+      @relationship(type: "IN_CATEGORY", direction: IN)
   }
 `;
 

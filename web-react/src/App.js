@@ -10,6 +10,7 @@ const BUSINESS_DETAILS_FRAGMENT = gql`
     categories {
       name
     }
+    isStarred @client
   }
 `
 
